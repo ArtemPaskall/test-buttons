@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './Style.scss'
 
 export default props => {
@@ -8,15 +8,6 @@ export default props => {
   const attributeToChange = attributes['change-attribute'].value
   const valuesList = attributes['values'].value.split(',')
   const maybeAskedDefaultValue = attributes.default?.value
-
-  const elementsToChange = document.querySelectorAll(selectorOfElementsToChange)
-  const maybeHostDefaultValue =
-    elementsToChange && elementsToChange[0].getAttribute(attributeToChange)
-  const defaultValue =
-    maybeHostDefaultValue || maybeAskedDefaultValue || valuesList[0]
-  document
-    .querySelectorAll(selectorOfElementsToChange)
-    .forEach(element => element.setAttribute(attributeToChange, defaultValue))
 
   const storage = {
     _scopedAttributeNameToStore: `automician.ButtonsMenu.${selectorOfElementsToChange}.${attributeToChange}`,
@@ -28,14 +19,47 @@ export default props => {
     },
   }
 
+  const elementsToChange = document.querySelectorAll(selectorOfElementsToChange)
+
+  const hostDefaultArray = []
+
+  if (!storage.getAttributeValue()) {
+    elementsToChange.forEach(item => {
+      if (item.getAttribute('byDefault'))
+      hostDefaultArray.push(item.getAttribute('byDefault'))
+    })
+    console.log(hostDefaultArray);
+  }
+
+  const defaultValue =
+    hostDefaultArray[0] || maybeAskedDefaultValue || valuesList[0]
+
+  document
+  .querySelectorAll(selectorOfElementsToChange)
+    .forEach(element => {
+      element.setAttribute(attributeToChange, defaultValue)
+    })
+
   if (!storage.getAttributeValue()) {
     storage.setAttributeToChange(defaultValue)
   }
 
   const valueFromStorage = storage.getAttributeValue()
 
+
+
+
+
+
   const [selectedValue, setSelectedValue] = useState(valueFromStorage)
   const state = { selectedValue, setSelectedValue }
+
+  useEffect(() => {
+    document.querySelectorAll(selectorOfElementsToChange).forEach(element => {
+      element.setAttribute(attributeToChange, selectedValue)
+    })
+
+   }, [selectedValue])
 
   function changeAttributeValue(value) {
     document.querySelectorAll(selectorOfElementsToChange).forEach(element => {
