@@ -46,9 +46,14 @@ export default props => {
 
   useEffect(() => {
     document.querySelectorAll(selectorOfElementsToChange).forEach(element => {
+      console.log(attributeToChange);
+      console.log(selectedValue);
+
       element.setAttribute(attributeToChange, selectedValue)
+      console.log( document.querySelectorAll(selectorOfElementsToChange));
     })
-   }, [selectedValue])
+    console.log('useEffect done');
+   }, [])
 
   function changeAttributeValue(value) {
     document.querySelectorAll(selectorOfElementsToChange).forEach(element => {
