@@ -19,19 +19,16 @@ export default props => {
     },
   }
 
-  const elementsToChange = document.querySelectorAll(selectorOfElementsToChange)
-
-  const hostDefaultArray = []
-
   if (!storage.getAttributeValue()) {
+    const elementsToChange = document.querySelectorAll(selectorOfElementsToChange)
+    const hostDefaultArray = []
+
     elementsToChange.forEach(item => {
       if (item.getAttribute('byDefault'))
       hostDefaultArray.push(item.getAttribute('byDefault'))
     })
-    console.log(hostDefaultArray);
-  }
 
-  const defaultValue =
+    const defaultValue =
     hostDefaultArray[0] || maybeAskedDefaultValue || valuesList[0]
 
   document
@@ -40,17 +37,10 @@ export default props => {
       element.setAttribute(attributeToChange, defaultValue)
     })
 
-  if (!storage.getAttributeValue()) {
     storage.setAttributeToChange(defaultValue)
   }
 
   const valueFromStorage = storage.getAttributeValue()
-
-
-
-
-
-
   const [selectedValue, setSelectedValue] = useState(valueFromStorage)
   const state = { selectedValue, setSelectedValue }
 
@@ -58,15 +48,14 @@ export default props => {
     document.querySelectorAll(selectorOfElementsToChange).forEach(element => {
       element.setAttribute(attributeToChange, selectedValue)
     })
-
    }, [selectedValue])
 
   function changeAttributeValue(value) {
     document.querySelectorAll(selectorOfElementsToChange).forEach(element => {
       element.setAttribute(attributeToChange, value)
     })
-    state.setSelectedValue(value)
 
+    state.setSelectedValue(value)
     storage.setAttributeToChange(value)
   }
 
