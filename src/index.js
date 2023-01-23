@@ -15,9 +15,10 @@ register(
 register(
   ({ children, style }) => (
     <div
-      style={{
+    style={{
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
         ...style,
       }}
@@ -53,6 +54,15 @@ const FlexFillWithGrow =
     return children || <React.Fragment />
   }
 
-;[...Array(13).keys()].forEach(grow =>
+[...Array(13).keys()].forEach(grow =>
   register(FlexFillWithGrow(grow), `flex-${grow}`, React, ReactDOM),
 )
+
+
+const Flex = (grow) => {
+  return ({ children, rootElement }) => {
+    rootElement.style.flex = grow
+    return children || <React.Fragment />
+  }
+}
+
